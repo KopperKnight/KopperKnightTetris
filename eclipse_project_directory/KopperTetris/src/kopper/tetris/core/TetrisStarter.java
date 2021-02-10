@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
+/**
+ * This class provides the entry point to the Tetris Game application.
+ * @author KopperKnight
+ * 
+ * 
+ */
 public class TetrisStarter 
 {
 	/**
