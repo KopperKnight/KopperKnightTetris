@@ -3,6 +3,14 @@ package kopper.tetris.shape;
 import java.awt.*;
 
 import kopper.tetris.core.*;
+
+/**
+ * 
+ * @author KopperKnight
+ *
+ *
+ *A class that defines the superclass for a Tetromino shape.
+ */
 public abstract class Shape 
 {
 	public static Coord[] cloneCoords(Coord[]coords)

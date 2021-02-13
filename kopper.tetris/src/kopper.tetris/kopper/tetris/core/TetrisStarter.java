@@ -13,23 +13,29 @@ import java.io.*;
 public class TetrisStarter 
 {
 	/**
-	 * 
+	 *  The entry point of the KopperKnight Tetris application.
 	 */
 	public static void main(String[]arg)
 	{
 		JFrame frame =new JFrame("KopperKnight Tetris (Build 0.20210210)");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		TetrisGame game=new TetrisGame(frame);
-		try
+		
+		InputStream  in=TetrisStarter.class.getResourceAsStream("kopper.png");
+		if(in!=null)
 		{
-			Image image=ImageIO.read(TetrisStarter.class.getResourceAsStream("kopper.png"));
-			if(image!=null)
-			frame.setIconImage(image);
+			try
+			{
+				Image image=ImageIO.read(TetrisStarter.class.getResourceAsStream("kopper.png"));
+				if(image!=null)
+					frame.setIconImage(image);
+			}
+			catch(IOException e)
+			{
+				
+			}
 		}
-		catch(IOException e)
-		{
-			
-		}
+	
 		frame.getContentPane().add(game);
 		frame.addKeyListener(game);
 		frame.addFocusListener(game);
