@@ -16,6 +16,7 @@ jar -c -v -f koppertetris.jar --main-class=kopper.tetris.core.TetrisStarter -C %
 @echo ^|^|that same way to and on any computer that has java platform       ^|^|
 @echo ^|^|installed.                                                        ^|^|
 @echo ======================================================================
+pause
 ) ELSE (
 @echo off
 @echo off

@@ -1,8 +1,13 @@
 SETLOCAL
 
+
 set outdir=commandlinecompiledbinaries
 
-javac -d %outdir%\kopper.tetris\ src\kopper.tetris\*.java src\kopper.tetris\kopper\tetris\core\*.java src\kopper.tetris\kopper\tetris\shape\*.java
+mkdir %outdir%\kopper.tetris\
+
+javac -d %outdir%\kopper.tetris\ src\kopper.tetris\kopper\tetris\core\*.java src\kopper.tetris\kopper\tetris\shape\*.java
+
+javac -d %outdir%\kopper.tetris\ src\kopper.tetris\*.java
 
 copy src\kopper.tetris\kopper\tetris\core\kopper.png %outdir%\kopper.tetris\kopper\tetris\core\kopper.png
  
