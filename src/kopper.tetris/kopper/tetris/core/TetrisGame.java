@@ -4,6 +4,22 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import kopper.tetris.shape.Shape;
+
+/**
+ * 
+ * @author micha
+ * 
+ * This class combines all of the data models and drawable items (Classes with {@code drawOBJECTNAME(Graphics2D g2d);} to perform all
+ * the major functions a Tetris Game would be expected to provide on an overall level. The Data models (referring to all the objects in the module)
+ * are all drawn to this subclass of JPanel. In the Model Viewer Controller software architecture, this class combines the model classes:
+ * mostly represented by {@link BackgroundGrid}, {@link Shape} (and its subclasses), with the viewer classes and methods: {@link TetrisGame},
+ * which is a subclass of {@link JPanel} and heavily relies on {@link TetrisGame#paintComponent(Graphics)} and {@code drawOBJECTNAME(Graphics2D g2d)} methods
+ * and the controller classes and methods: {@link java.awt.event.KeyListener} implemented in TetrisGame as methods.
+ * 
+ * One need only to add this TetrisGame object to a JFrame and wireup the {@link javax.swing.JFrame}'s KeyListeners,FocusListeners to this 
+ * class to make a self contained complete application that is a remake of Tetris!
+ *
+ */
 public class TetrisGame extends JPanel implements KeyListener,FocusListener
 {
 	
@@ -13,11 +29,92 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 	public static char ARROW_RIGHT='\u2192';
 	public static char ARROW_DOWN='\u2193';
 
+	
+	/**
+	 * A Class which represents the state of a TetrisGame. 
+	 * 
+	 * Each of the FOUR states represents a different rendering flow inside of the {@link JPanel}'s overridden method  {@link TetrisGame#paintComponent(Graphics)}.
+	 * 
+	 * <p>Note: In future releases I hope to potentially add a FIFTH state, probably titled GAME_ANIMATION, to accommodate some attractive animations during
+	 * the row deletion process of the Tetris Game. Also, looking into changing this class to an Enum declaration in future releases.
+	 * @author micha
+	 *
+	 */
 	public static class State
 	{
+		/**
+		 * <p>This is the constant representing the game when it is first started up.
+		 * During this rendering flow. The following methods are called in order:
+		 *  </p>
+		 * <ol>
+		 * 	<li> {@link TetrisGame#performOneAnimationTick()} The internal {@link javax.swing.Timer} object triggers this method 25 times per second. </li>
+		 *  <li> {@link TetrisGame#repaint()} This is called 25 times per second.</li>
+		 *  <li> {@link TetrisGame#paintComponent(Graphics)} is called when ever {@link TetrisGame#repaint()} is called.</li>
+		 * 	
+		 * 	<li> {@link TetrisGame#paintGameRunning(Graphics2D, State)}. This is called whenever {@link TetrisGame#paintComponent(Graphics)} is called.
+		 * This method paints the running game data represented mostly by {@link BackgroundGrid} is always painted on the bottom.</li>
+		 * 	<li> {@link TetrisGame#paintGameStartScreen(Graphics2D)}. This is always called whenever {@link TetrisGame#paintComponent(Graphics)} is called 
+		 * AND during this State {@code GAME_START_SCREEN=0;}. 
+		 * The start screen is painted over the game with a translucent color so that one can see the game screen behind the start screen.</li>
+		 *</ol>
+		 * 
+		 * 
+		 */
 		public static final int GAME_START_SCREEN=0;
+		
+		/**
+		 * <p>This is the constant representing the game when it running and being played. 
+		 * During this rendering flow. The following methods are called in order:
+		 * <ol>
+		 * 	<li> {@link TetrisGame#performOneAnimationTick()} The internal {@link javax.swing.Timer} object triggers this method 25 times per second. </li>
+		 *  <li> {@link TetrisGame#repaint()} This is called 25 times per second.</li>
+		 *  <li> {@link TetrisGame#paintComponent(Graphics)} is called when ever {@link TetrisGame#repaint()} is called.</li>
+		 * 	
+		 * 	<li> {@link TetrisGame#paintGameRunning(Graphics2D, State)}. This is called whenever {@link TetrisGame#paintComponent(Graphics)} is called.
+		 * This method paints the running game data represented mostly by {@link BackgroundGrid} is always painted on the bottom.</li>
+		 * 	<li> {@link TetrisGame#performOneAnimationTick() }. The internals of this method always execute once for every {@link TetrisGame#TICKS_BETWEEN_GRAVITY } times
+		 * that {@link TetrisGame#performOneAnimationTick() } is called
+		 * AND during this State {@code GAME_RUNNING=1;}. </li>
+		 *</ol>
+		 * 
+		 * 
+		 */
 		public static final int GAME_RUNNING=1;
+		/**
+		 * <p>This is the constant representing the game when it is paused. 
+		 * During this rendering flow. The following methods are called in order:
+		 * <ol>
+		 * 	<li> {@link TetrisGame#performOneAnimationTick()} The internal {@link javax.swing.Timer} object triggers this method 25 times per second. </li>
+		 *  <li> {@link TetrisGame#repaint()} This is called 25 times per second.</li>
+		 *  <li> {@link TetrisGame#paintComponent(Graphics)} is called when ever {@link TetrisGame#repaint()} is called.</li>
+		 * 	
+		 * 	<li> {@link TetrisGame#paintGameRunning(Graphics2D, State)}. This is called whenever {@link TetrisGame#paintComponent(Graphics)} is called.
+		 * This method paints the running game data represented mostly by {@link BackgroundGrid} is always painted on the bottom.</li>
+		 * 	<li> {@link TetrisGame#paintGamePauseScreen(Graphics2D)}. This is always called whenever {@link TetrisGame#paintComponent(Graphics)} is called 
+		 * AND during this State {@code GAME_PAUSED=2;}. 
+		 * The pause screen is painted over the game with a translucent color so that one can see the game screen behind the start screen.</li>
+		 *</ol>
+		 * 
+		 * 
+		 */
 		public static final int GAME_PAUSED=2;
+		/**
+		 * <p>This is the constant representing the game when it is over and the user has lost. 
+		 * During this rendering flow. The following methods are called in order:
+		 * <ol>
+		 * 	<li> {@link TetrisGame#performOneAnimationTick()} The internal {@link javax.swing.Timer} object triggers this method 25 times per second. </li>
+		 *  <li> {@link TetrisGame#repaint()} This is called 25 times per second.</li>
+		 *  <li> {@link TetrisGame#paintComponent(Graphics)} is called when ever {@link TetrisGame#repaint()} is called.</li>
+		 * 	
+		 * 	<li> {@link TetrisGame#paintGameRunning(Graphics2D, State)}. This is called whenever {@link TetrisGame#paintComponent(Graphics)} is called.
+		 * This method paints the running game data represented mostly by {@link BackgroundGrid} is always painted on the bottom.</li>
+		 * 	<li> {@link TetrisGame#paintGameOverScreen(Graphics2D) }. This is always called whenever {@link TetrisGame#paintComponent(Graphics)} is called 
+		 * AND during this State {@code GAME_OVER=3;}. 
+		 * The game over screen is painted over the game with a translucent color so that one can see the game screen behind the start screen.</li>
+		 *</ol>
+		 * 
+		 * 
+		 */
 		public static final int GAME_OVER=3;
 		private int currentState=0;
 		public State()//default state is Game START Screen
@@ -284,19 +381,17 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		paintGameRunning(g2d,currentState);
 		if(currentState.isGameStartScreen())
 			paintGameStartScreen(g2d);
-		if(currentState.isGameStartScreen())
-			paintGameStartScreen(g2d);
 		if(currentState.isGameOver())
 			paintGameOverScreen(g2d);
 		if(currentState.isGamePaused())
 			paintGamePauseScreen(g2d);
 		
 	}
-	private void paintGameStartScreen(Graphics2D g2d)
+	public void paintGameStartScreen(Graphics2D g2d)
 	{
 		pauseScreen.drawStartScreen(g2d);
 	}
-	private void paintGameRunning(Graphics2D g2d,State state)
+	public void paintGameRunning(Graphics2D g2d,State state)
 	{
 		grid.drawBackgroundGrid(g2d);
 		statGrid.drawTetrominoStats(g2d,state.isGameOver());
@@ -309,11 +404,11 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		g2d.setColor(Color.black);
 		
 	}
-	private void paintGamePauseScreen(Graphics2D g2d)
+	public void paintGamePauseScreen(Graphics2D g2d)
 	{
 		pauseScreen.drawPauseScreen(g2d); 
 	}
-	private void paintGameOverScreen(Graphics2D g2d)
+	public void paintGameOverScreen(Graphics2D g2d)
 	{
 		FontMetrics metrics = g2d.getFontMetrics(gameOverFont);
 		int textHeight=metrics.getHeight();
@@ -360,11 +455,6 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		currentState.setGameOver();
 		repaint();
 		
-	}
-	public void drawGame(Graphics2D g2d)//done each animation tick.
-	{
-		grid.drawBackgroundGrid(g2d);
-		currentShape.drawShape(g2d, grid);
 	}
 	public void performOneAnimationTick()
 	{

@@ -14,6 +14,7 @@ public class TetrisStarter
 {
 	/**
 	 *  The entry point of the KopperKnight Tetris application.
+	 *  @param arg The command line arguments.
 	 */
 	public static void main(String[]arg)
 	{

@@ -41,6 +41,27 @@ public abstract class Shape
 		return this.visible;
 	}
 	
+	/**
+	 * <p>This method is named differently for various classes, but all classes that must paint 
+	 * representations of their data to the window, have some variation
+	 * of a method {@code drawOBJECTNAME(Graphics2D g2d);} This is that method for this class.
+	 * <p>Note: TO BE REIMPLEMENTED AS AN INTERFACE DEFINITION implemented by all drawable classes in the future.
+	 * 
+	 * <p>This method is where the background model data represented by this object is painted to represent this object.
+	 * Specifically, this object keeps track of each gridcell's color, each cell making up this Shape's shape relative to this Shape's origin.
+	 * 
+	 * <p>
+	 * This method is called inside {@link TetrisGame#paintGameRunning(Graphics2D, kopper.tetris.core.TetrisGame.State) },
+	 * or inside of {@link TetrominoStats#drawTetrominoStats(Graphics2D, boolean) },
+	 *  which in turn is called by each respective caller methods (see their method documentation).
+	 * 
+	 * 
+	 * @param g2d The graphics object ultimately supplied by overridden method  {@link TetrisGame#paintComponent(java.awt.Graphics)}
+	 * @param grid The grid that represents the background. This is used to prevent Exceptions that would occur if an off screen location
+	 * represented by the shape were called. 
+	 * 
+	 * 
+	 */
 	public void drawShape(Graphics2D g2d,BackgroundGrid grid)
 	{
 		if(this.isVisible())
@@ -53,6 +74,23 @@ public abstract class Shape
 		}
 		
 	}
+	/**
+	 * <p>This method is named differently for various classes, but all classes that must paint 
+	 * representations of their data to the window, have some variation
+	 * of a method {@code drawOBJECTNAME(Graphics2D g2d);} This is that method for this class.
+	 * <p>Note: TO BE REIMPLEMENTED AS AN INTERFACE DEFINITION implemented by all drawable classes in the future.
+	 * 
+	 * <p>This method is where the background model data represented by this object is painted to represent this object.
+	 * Specifically, this object keeps track of each gridcell's color, whether it is occupied by a cell of a dead shape
+	 * or empty space and the background color of empty space. 
+	 * 
+	 * <p>
+	 * This method is called via helper method {@link TetrisGame#paintGameRunning(Graphics2D, kopper.tetris.core.TetrisGame.State)}, which in turn is called by {@link TetrisGame#paintComponent(java.awt.Graphics)}, 
+	 * which in turn is an overridden method of {@link javax.swing.JComponent#paintComponent(Graphics g)}.
+	 * @param g2d The graphics object ultimately supplied by overridden method  {@link TetrisGame#paintComponent(java.awt.Graphics)}
+	 * @param cells This is used for drawing shapes that are not on top of the {@link BackgroundGrid} object. For example, drawing the
+	 * {@link TetrominoStats#drawTetrominoStats(Graphics2D, boolean)} requires this method.
+	 */
 	public void drawShape(Graphics2D g2d,GridCell[][]cells)
 	{
 		if(this.isVisible())

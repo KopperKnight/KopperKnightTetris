@@ -79,6 +79,25 @@ public class TetrominoStats
 	{
 		return score;
 	}
+	/**
+	 * <p>This method is named differently for various classes, but all classes that must paint 
+	 * representations of their data to the window, have some variation
+	 * of a method {@code drawOBJECTNAME(Graphics2D g2d);} This is that method for this class.
+	 * <p>Note: TO BE REIMPLEMENTED AS AN INTERFACE DEFINITION implemented by all drawable classes in the future.
+	 * 
+	 * <p>This method is where the TetrominoStats represented by this object is painted to represent this object.
+	 * Specifically, this object keeps track of each {@link GridCell}, Color and Shape painted in the Game's Score area of the window.
+	 * 
+	 * <p>
+	 * This method is called via helper method {@link TetrisGame#paintGameRunning(Graphics2D, kopper.tetris.core.TetrisGame.State)}, 
+	 * which in turn is called by {@link TetrisGame#paintComponent(java.awt.Graphics)}, 
+	 * which in turn is an overridden method of {@link javax.swing.JPanel}'s {@link javax.swing.JComponent#paintComponent(Graphics g)}.
+	 *  
+	 * 
+	 * 
+	 * @param g2d The graphics object ultimately supplied by overridden method  {@link TetrisGame#paintComponent(java.awt.Graphics)}
+	 * @param isGameOver used to make the score String colors white and able to be seen through translucent red GameOver paint.
+	 */
 	public void drawTetrominoStats(Graphics2D g2d,boolean isGameOver)
 	{
 		updateRectangles(g2d);

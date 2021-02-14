@@ -14,7 +14,9 @@ import kopper.tetris.shape.*;
  *{@link GridCell}. This class paints the entire area of the Tetris game. The {@link Shape} class then paints over the background
  * its information according to the {@link Coord} objects inside the {@link Shape} model. When a shape is consumed by an object of this class using 
  * {@link BackgroundGrid#consumeShape(Shape)}, that object's data for cell color and cell location are inputed into this objects internal model representation
- * of the background of the Tetris game. Therefore, this class draws the background of the Tetris game and occupied cells left over by dead consumed Shapes.
+ * of the background of the Tetris game. Therefore, this class draws the background of the Tetris game and occupied cells left over by "dead" colored cells
+ * of consumed "dead" Shapes. Programmatically, the shape object consumed by {@link BackgroundGrid#consumeShape(Shape)} is dereferenced and collected by the 
+ * Garbage Collector, while conceptually it and its dead cells stitched into this BackgroundGrid's internal model will be refered to as a "Dead Shape".
  * </p>
  *  @author KopperKnight
  */
@@ -139,19 +141,35 @@ public class BackgroundGrid
 	{
 		return this.columns;
 	}
+	/**
+	 * <p>This method is named differently for various classes, but all classes that must paint 
+	 * representations of their data to the window, have some variation
+	 * of a method {@code drawOBJECTNAME(Graphics2D g2d);} This is that method for this class.
+	 * <p>Note: TO BE REIMPLEMENTED AS AN INTERFACE DEFINITION implemented by all drawable classes in the future.
+	 * 
+	 * <p>This method is where the background model data represented by this object is painted to represent this object.
+	 * Specifically, this object keeps track of each gridcell's color, whether it is occupied by a cell of a dead shape
+	 * or empty space and the background color of empty space. 
+	 * 
+	 * <p>
+	 * This method is called via helper method {@link TetrisGame#paintGameRunning(Graphics2D, kopper.tetris.core.TetrisGame.State)}, which in turn is called by {@link TetrisGame#paintComponent(java.awt.Graphics)}, 
+	 * which in turn is an overridden method of{@link javax.swing.JPanel}'s {@link javax.swing.JComponent#paintComponents(java.awt.Graphics) }.
+	 * @param g2d The graphics object ultimately supplied by overridden method  {@link TetrisGame#paintComponent(java.awt.Graphics)}
+	 */
 	public void drawBackgroundGrid(Graphics2D g2d)
 	{
 		for(int r=0;r<cells.length;r++)
 			for(int c=0;c<cells[r].length;c++)
 			{	cells[r][c].setColor(backgroundColor);
-				cells[r][c].drawCell(g2d, false);
+				cells[r][c].drawCell(g2d, false); 
 				cells[r][c].setColor(internalStructure[r][c]);
 				cells[r][c].drawCell(g2d,isOccupied[r][c]);
 			}
 	}
 	/**
 	 * Takes the individual colors and cell coordinates of the supplied {@link Shape} object copies those colors and coordinates into the internal grid model of this objects
-	 * grid of cells. The shape is now painted as if it were the background represented by this object.
+	 * grid of cells. The shape is now painted as if it were the background represented by this object. Conceptually, this shape will be referred to as a dead shape. 
+	 * However, programmatically, the shape object is collected by the Garbage Collector and the reference to it is assigned a new Shape in the code for {@link TetrisGame}.
 	 * @param s The shape to make part of the background.
 	 */
 	public void consumeShape(Shape s)
@@ -176,6 +194,16 @@ public class BackgroundGrid
 		}
 		
 	}
+	/**
+	 * This method calls the supplied Shape's method {@link Shape#trialTranslateShape(int, int)} and compares the returned {@link Coord}
+	 * object data to this object's internal model (a 2D boolean array) to determine if the the coordinates are supplied by a trial translation
+	 * are already occupied. 
+	 * 
+	 * @param s The shape being tested for collision with occupied cells.
+	 * @param x The translation vector x component. Typically of magnitude one with + or - determining direction.
+	 * @param y The translation vector y component. Typically of magnitude one with + or - determining direction.
+	 * @return True if none of the trial coordinates collide with occupied cells and False if otherwise, as defined by the private data of this {@link BackgroundGrid} object.
+	 */
 	public boolean canTranslate(Shape s,int x, int y)
 	{
 		s.trialTranslateShape(x, y);
@@ -188,10 +216,23 @@ public class BackgroundGrid
 		}
 		return true;
 	}
+	/**
+	 * A convenience method which calls {@link BackgroundGrid#canTranslate(Shape, int, int)} with a downward vector of (x,y)=(0,1).
+	 * @param s The shape being tested for collision with occupied cells.
+	 * @return True if none of the trial coordinates collide with occupied cells and False if otherwise, as defined by the private data of this {@link BackgroundGrid} object.
+	 */
 	public boolean canTranslateDown(Shape s)
 	{
 		return canTranslate(s,0,1);
 	}
+	/**
+	 * This method calls the supplied Shape's method {@link Shape#trialRotateShapeClockwise90() } and compares the returned {@link Coord}
+	 * object data to this object's internal model (a 2D boolean array) to determine if the the coordinates are supplied by a trial translation
+	 * are already occupied. 
+	 * 
+	 * @param s The shape being tested for collision with occupied cells.
+	 * @return True if none of the trial coordinates collide with occupied cells and False if otherwise, as defined by the private data of this {@link BackgroundGrid} object.
+	 */
 	public boolean canRotateCW90(Shape s)
 	{
 		s.trialRotateShapeClockwise90();
@@ -204,6 +245,15 @@ public class BackgroundGrid
 		}
 		return true;
 	}
+	/**
+	 * 
+	 * This method calls the supplied Shape's method {@link Shape#trialRotateShapeCounterClockwise90() } and compares the returned {@link Coord}
+	 * object data to this object's internal model (a 2D boolean array) to determine if the the coordinates are supplied by a trial translation
+	 * are already occupied. 
+	 * 
+	 * @param s The shape being tested for collision with occupied cells.
+	 * @return True if none of the trial coordinates collide with occupied cells and False if otherwise, as defined by the private data of this {@link BackgroundGrid} object.
+	 */
 	public boolean canRotateCCW90(Shape s)
 	{
 		s.trialRotateShapeCounterClockwise90();
@@ -216,6 +266,17 @@ public class BackgroundGrid
 		}
 		return true;
 	}
+	/**
+	 * This method determines of a cell is off limits to a live {@link Shape}. When the row and column supplied are with in the bounds of the
+	 * drawable background, it returns the value of the internal boolean 2D array, which represents whether a dead cell occupies a location or not. 
+	 * Otherwise, when the row and column supplied are not within the drawable background, then the location is considered off limits in all cases
+	 *  EXCEPT when the {@code row<0}, which is the top of the screen (and where shapes spawn in the game off screen). This is the method used to keep shapes
+	 *  from going out of bounds left or right or falling down through the bottom of the game, when no dead shapes are on the bottom to stop a Shape.
+	 * @param r The row in question (also known as the Y coordinate in Cartesian setup).
+	 * @param c The column in question (also known as the X coordinate in Cartesian setup).
+	 * @return returns True if location is occupied by a dead Shape, is off screen to the LEFT or RIGHT or BOTTOM of the game. All locations that
+	 * have no dead shapes or are ABOVE the game off screen return false.
+	 */
 	public boolean isOffLimits(int r,int c)
 	{
 		if(c>=0&&c<columns&&r>=0&&r<rows)
@@ -223,17 +284,34 @@ public class BackgroundGrid
 		else
 			return c<0||c>=columns||r>=rows;//ceiling is unoccupied to infinity;
 	}
+	/**
+	 * A Convenience method which calls {@link BackgroundGrid#canTranslateDown(Shape) } and negates it.
+	 * In other words, a Shape is considered dead if it cannot move downwards anymore.
+	 * @param s The shape being tested as dead or not.
+	 * @return True if shape is dead and cannot move down; False if otherwise; Is the opposite value returned by {@link BackgroundGrid#canTranslateDown(Shape)}.
+	 */
 	public boolean isShapeDead(Shape s)
 	{
 		return !canTranslateDown(s);
 	}
+	/**
+	 * Detects any horizontal rows that are completely full of dead Shape's and removes them. 
+	 * This method calls and combines {@link BackgroundGrid#detectFullRows()} and {@link BackgroundGrid#removeDetectedRows()} into this one method.
+	 * The same exact results can be achieved by calling these two methods in the order stated.
+	 */
 	public void detectFullRowsAndDelete()
 	{
 		detectFullRows();
 		removeDetectedRows();
 	}
+	/**
+	 * This method searches all the rows for rows that are completely full of dead Shape's. The resulting indices are stored privately in this BackgroundGrid
+	 * Object. 
+	 * @return Returns the total number of rows counted to be full.
+	 */
 	public int detectFullRows()
 	{
+		this.rowRemovalIndicesCount=0;
 		for(int r=0;r<this.rows;r++)//must search and add indices in lowest (first) to highest (last) order for removal to properly.
 		{
 			if(isRowFull(r))
@@ -244,18 +322,42 @@ public class BackgroundGrid
 		}
 		return this.rowRemovalIndicesCount;
 	}
+	/**
+	 * Returns the total number of rows counted to be full the last time {@link BackgroundGrid#detectFullRows()} was called. If it wasn't ever called,
+	 * or if rows detected previously have already been deleted by calling {@link BackgroundGrid#removeDetectedRows() }, then it returns Zero.
+	 * @return total number of rows counted to be full. Zero if never called before, or cleared previously.
+	 */
 	public int getDetectFullRowCount()
 	{
 		return this.rowRemovalIndicesCount;
 	}
+	/**
+	 * Removes all rows previously detected by the call {@link BackgroundGrid#detectFullRows()}. If none were detected, then the method will do nothing as 
+	 * it operates on a for loop and the initial index value of for loop is 0 and the test {@code 0<0} will fail before method's executes.
+	 * This method will clear the number of rows detected to be full back to zero. Another call to {@link BackgroundGrid#detectFullRows() } must be called 
+	 * again or else the number of full rows internally stored will remain at zero. This method removes rows in order of lowest numbered row (top of screen)
+	 * first to the highest number row (bottom of the screen) last. This method calls {@link BackgroundGrid#removeRow(int) } in a for loop. Do not override that
+	 * method without considering this method also.
+	 */
 	public void removeDetectedRows()
 	{
 		for(int i=0;i<this.rowRemovalIndicesCount;i++)
 		{
 			removeRow(this.rowRemovalIndices[i]);
 		}
-		this.rowRemovalIndicesCount=0;
+		//this.rowRemovalIndicesCount=0;
 	}
+	/**
+	 * This method is called in a for loop by {@link BackgroundGrid#removeDetectedRows() }. This method removes the specified row
+	 * All lower numbered rows less than the specified row number (higher on the screen) are shifted to one row higher numbered row (moved down on screen by one row).
+	 * This method reduces the count of detected full rows by one, REGARDLESS of if the row specified is FULL or NOT. 
+	 * If the row removed is not full, a call to {@link BackgroundGrid#detectFullRows()} should be called again to refresh the row count to the correct amount,
+	 * otherwise a glitch can occur as the full row count would not be accurate in this situation anymore.
+	 * If the number of detected rows is already zero, this method does not reduce the count of detected full rows any lower than zero.
+	 * @param row The specified row to be deleted, can be full or not or empty.
+	 * 
+	 * 
+	 */
 	public void removeRow(int row)
 	{
 		int deletedRow=row;
@@ -274,8 +376,20 @@ public class BackgroundGrid
 				}
 			}
 		}
+		this.rowRemovalIndicesCount--;
+		
+		if(this.rowRemovalIndicesCount<0)
+		{
+			this.rowRemovalIndicesCount=0;
+		}
 	}
 	
+	/**
+	 * Determines if the number of dead shape cells in a row matches the number of row cells.
+	 * This method is required by {@link BackgroundGrid#detectFullRows()} for it to function properly.
+	 * @param row The row in question.
+	 * @return True if the row is fully occupied by dead shape's cells, False otherwise.
+	 */
 	public boolean isRowFull(int row)
 	{
 		if(isOccupied.length>0)
@@ -291,6 +405,14 @@ public class BackgroundGrid
 			return false;
 		
 	}
+	/**
+	 * Determines if a shape is completely in the drawable area. If even one cell of a given Shape is not in the drawable area,
+	 * then it returns true.
+	 * This method is used to test one of the GameOver conditions and is used in the methods {@link TetrisGame#performOneGameTick()}
+	 *  and {@link TetrisGame#keyPressed(java.awt.event.KeyEvent)}.
+	 * @param s The shape in question.
+	 * @return True if even one cell of a given shape is outside the drawable area. False otherwise.
+	 */
 	public boolean isShapeOutBounds(Shape s)
 	{
 		int row=0;
