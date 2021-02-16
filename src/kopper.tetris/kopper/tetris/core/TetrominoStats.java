@@ -5,7 +5,13 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.Font;
 import kopper.tetris.shape.*;
-
+/**
+ * This class keeps track of pixel data and colors and shapes to draw the score area of the Tetris Game.
+ * This class is used to keep track of the {@link java.awt.Rectangle} and {@link java.awt.FontMetrics} data for each
+ * text/numerical message painted to the screen, which is vital to keep the text properly positioned and spaced.
+ * @author micha
+ *
+ */
 public class TetrominoStats 
 {
 	GridCell[][] cells;
@@ -19,7 +25,10 @@ public class TetrominoStats
 	Font statsFont=new Font("Serif",Font.PLAIN,24);
 	Font temp;
 	private int fontHeight;
-	
+	/**
+	 * Constructs a TetrominoStats object.
+	 * @param score A reference to the current object keeping track of the game score.
+	 */
 	public TetrominoStats(TetrisScore score)
 	{
 		int tetrominoTextY=840;
@@ -75,6 +84,10 @@ public class TetrominoStats
 		}
 		
 	}
+	/**
+	 * Returns a reference to the current object's whose data is used to present the numerical score to the GUI window.
+	 * @return The object used to update the score.
+	 */
 	public TetrisScore getTetrisScore()
 	{
 		return score;
@@ -140,7 +153,16 @@ public class TetrominoStats
 		g2d.setColor(tColor);
 			
 	}
+	/**
+	 * A quick debug variable for printing to System out for debugging. An API change planned for future version to 
+	 * centralize the debugging variable across the entire module will likely remove this specific variable.
+	 */
 	boolean debug=true;
+	
+	/**
+	 * A helper method to calculate the proper pixel dimensions and pixel coordinates to draw the ever changing Text / Numerical Strings to the screen properly.
+	 * @param g2d The graphics object from the drawing JPanel.
+	 */
 	private void updateRectangles(Graphics2D g2d)
 	{
 		FontMetrics metrics=g2d.getFontMetrics(statsFont);

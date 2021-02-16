@@ -116,47 +116,91 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		 * 
 		 */
 		public static final int GAME_OVER=3;
+		/**
+		 * The variable storing the current state of this object.
+		 */
 		private int currentState=0;
+		/**
+		 * Create a new State object.
+		 */
 		public State()//default state is Game START Screen
 		{
 			
 		}
+		/**
+		 * Sets the current state of this object to be {@link TetrisGame.State#GAME_START_SCREEN}
+		 */
 		public void setGameStartScreen()
 		{
 			currentState=GAME_START_SCREEN;
 		}
+		/**
+		 * Sets the current state of this object to be {@link TetrisGame.State#GAME_RUNNING}
+		 */
 		public void setGameRunning()
 		{
 			currentState=GAME_RUNNING;
 		}
+		/**
+		 * Sets the current state of this object to be {@link TetrisGame.State#GAME_PAUSED}
+		 */
 		public void setGamePaused()
 		{
 			currentState=GAME_PAUSED;
 		}
+		/**
+		 * Sets the current state of this object to be {@link TetrisGame.State#GAME_OVER}
+		 */
 		public void setGameOver()
 		{
 			currentState=GAME_OVER;
 		}
+		/**
+		 * Get the current state of this object. One of the four constants representing a game state will be returned:
+		 * {@link TetrisGame.State#GAME_START_SCREEN },{@link TetrisGame.State#GAME_RUNNING},{@link TetrisGame.State#GAME_PAUSED},{@link TetrisGame.State#GAME_OVER}.
+		 * @return The current state this object is in.
+		 */
 		public int getCurrentState()
 		{
 			return currentState;
 		}
+		/**
+		 * Tests this object's current state value to see if it is equal to the {@link TetrisGame.State#GAME_RUNNING} constant.
+		 * @return True if this game's current state is {@code GAME_RUNNING}.
+		 */
 		public boolean isGameRunning()
 		{
 			return currentState==GAME_RUNNING;
 		}
+		/**
+		 * Tests this object's current state value to see if it is equal to the {@link TetrisGame.State#GAME_START_SCREEN} constant.
+		 * @return True if this game's current state is {@code GAME_START_SCREEN}.
+		 */
 		public boolean isGameStartScreen()
 		{
 			return currentState==GAME_START_SCREEN;
 		}
+		/**
+		 * Tests this object's current state value to see if it is equal to the {@link TetrisGame.State#GAME_PAUSED } constant.
+		 * @return True if this game's current state is {@code GAME_PAUSED}.
+		 */
 		public boolean isGamePaused()
 		{
 			return currentState==GAME_PAUSED;
 		}
+		/**
+		 * Tests this object's current state value to see if it is equal to the {@link TetrisGame.State#GAME_OVER} constant.
+		 * @return True if this game's current state is {@code GAME_OVER}.
+		 */
 		public boolean isGameOver()
 		{
 			return currentState==GAME_OVER;
 		}
+		/**
+		 * Returns the string representation of this object, which is a single line string with the class name and the constant field name for the variable 
+		 * representing this objects current state.
+		 * @return this object's string representation.
+		 */
 		public String toString()
 		{
 			String temp="TetrisGame.State";

@@ -1,8 +1,26 @@
 package kopper.tetris.core;
 
+/**
+ * A class to represent the x,y components of a Cartesian coordinate pair.
+ * The needs fulfilled by this class could have easily been fulfilled by {@link java.awt.Point}, however, implementing my own version,
+ * was easier to make certain methods and operations specific to Tetris available.
+ * @author KopperKnight.
+ *
+ */
 public class Coord 
 {
-	private int x, y;
+	
+	/**
+	 *  Represents the x component of this object's Cartesian coordinate pair.
+	 */
+	private int x;
+	/**
+	 *  Represents the y component of this object's Cartesian coordinate pair.
+	 */
+	private int y;
+	/**
+	 * 
+	 */
 	public Coord()
 	{
 		this.x=0;
