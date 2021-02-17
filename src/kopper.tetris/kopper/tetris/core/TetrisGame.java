@@ -7,18 +7,30 @@ import kopper.tetris.shape.Shape;
 
 /**
  * 
- * @author micha
  * 
- * This class combines all of the data models and drawable items (Classes with {@code drawOBJECTNAME(Graphics2D g2d);} to perform all
+ * <p>This class combines all of the data models and drawable items (Classes with {@code drawOBJECTNAME(Graphics2D g2d);} to perform all
  * the major functions a Tetris Game would be expected to provide on an overall level. The Data models (referring to all the objects in the module)
- * are all drawn to this subclass of JPanel. In the Model Viewer Controller software architecture, this class combines the model classes:
- * mostly represented by {@link BackgroundGrid}, {@link Shape} (and its subclasses), with the viewer classes and methods: {@link TetrisGame},
- * which is a subclass of {@link JPanel} and heavily relies on {@link TetrisGame#paintComponent(Graphics)} and {@code drawOBJECTNAME(Graphics2D g2d)} methods
- * and the controller classes and methods: {@link java.awt.event.KeyListener} implemented in TetrisGame as methods.
+ * are all drawn to this subclass of JPanel. 
+ * </p>
+ * <p>
+ * In Figure 1 below, the diagram color codes what the running game screen of this TetrisGame looks like and what classes the internal objects of this
+ * TetrisGame responsible for each color coded subcomponent in the diagram are instantiated from. The object instantiated from the class
+ * {@link kopper.tetris.core.StartPauseScreen} has dotted outline to show that, when it is drawn, it is drawn over the entire area of the TetrisGame
+ * as a translucent layer. 
+ * </p>
+ * <img src="doc-files/tetrisgame.png" alt="TetrisGame Object Make up and Delegation">
  * 
+ * <p>
  * One need only to add this TetrisGame object to a JFrame and wireup the {@link javax.swing.JFrame}'s KeyListeners,FocusListeners to this 
  * class to make a self contained complete application that is a remake of Tetris!
+ *</p>
  *
+ *<p>In the Model Viewer Controller (MVC) software architecture, this class combines the model components:
+ * mostly represented by {@link BackgroundGrid}, {@link Shape} (and its subclasses), with the viewer components: {@link TetrisGame},
+ * which is a subclass of {@link JPanel} and heavily relies on {@link TetrisGame#paintComponent(Graphics)}, and {@code drawOBJECTNAME(Graphics2D g2d)} 
+ * methods and the controller components: {@link java.awt.event.KeyListener} implemented in TetrisGame as methods.
+ * </p>
+ *@author KopperKnight
  */
 public class TetrisGame extends JPanel implements KeyListener,FocusListener
 {
