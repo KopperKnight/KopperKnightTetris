@@ -30,15 +30,27 @@ import kopper.tetris.shape.Shape;
  * which is a subclass of {@link JPanel} and heavily relies on {@link TetrisGame#paintComponent(Graphics)}, and {@code drawOBJECTNAME(Graphics2D g2d)} 
  * methods and the controller components: {@link java.awt.event.KeyListener} implemented in TetrisGame as methods.
  * </p>
- *@author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  */
 public class TetrisGame extends JPanel implements KeyListener,FocusListener
 {
 	
 
+	/**
+	 * The unicode character for the arrow left key on the board.
+	 */
 	public static char ARROW_LEFT='\u2190';
+	/**
+	 * The unicode character for the arrow up key on the board.
+	 */
 	public static char ARROW_UP='\u2191';
+	/**
+	 * The unicode character for the arrow right key on the board.
+	 */
 	public static char ARROW_RIGHT='\u2192';
+	/**
+	 * The unicode character for the arrow down key on the board.
+	 */
 	public static char ARROW_DOWN='\u2193';
 
 	
@@ -49,7 +61,7 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 	 * 
 	 * <p>Note: In future releases I hope to potentially add a FIFTH state, probably titled GAME_ANIMATION, to accommodate some attractive animations during
 	 * the row deletion process of the Tetris Game. Also, looking into changing this class to an Enum declaration in future releases.
-	 * @author micha
+	 * @author <a href="https://github.com/kopperknight">KopperKnight</a>
 	 *
 	 */
 	public static class State
@@ -227,29 +239,86 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		}
 	}
 	/**
-	 * 
+	 * Serializable identifier. 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * The current shape, there can be only a maximum of one live shape at a time and this is where it is stored.
+	 */
 	private Shape currentShape;
+	/**
+	 * The internal object that paints the game background.
+	 */
 	private BackgroundGrid grid;
+	/**
+	 * The internal object that keeps track of the game's state.
+	 */
 	private State currentState;
+	/**
+	 * The internal object that paints the score and Tetromino Shape legend at the bottom of the game screen.
+	 */
 	private TetrominoStats statGrid;
+	/**
+	 * The internal object that paints the pause screen and the start screen. It only paints the start screen at the beginning of the game,
+	 * while the pause screen can be painted numerious times according to the game state logic, therefore the reason for the exclusively named field.
+	 */
 	private StartPauseScreen pauseScreen;
 	
+	
+	/**
+	 * The number of milliseconds between timer events, 40ms  is 25 events per second.
+	 */
 	private final int TIMER_PERIOD=40; //25 frames per second.
+	/**
+	 * The number of timer events between a single iteration in game logic, such as moving the current shape down one row.
+	 */
 	private final int TICKS_BETWEEN_GRAVITY=15;
+	/**
+	 * Keeps track of the number of animation events since the last game logic iteration. 
+	 * When this value reaches the value of {@link TetrisGame#TICKS_BETWEEN_GRAVITY}, it resets to zero and keeps track of the count again.
+	 * 
+	 */
 	private int animationTickCount=0;
+	/**
+	 * The spawn location of a new shape is set to the horizontal center and one cell over the top of the game screen.
+	 */
 	private Coord spawnCoord=new Coord(10,-1);
+	/**
+	 * The size in terms of height and width of this JPanel required to properly present the game.
+	 */
 	private Dimension preferredSize=new Dimension(660,870+90);
+	/**
+	 * An internal variable to hold the gridcells that make up the LEFT border of the game area.
+	 */
 	private GridCell[] leftWalls;
+	/**
+	 * An internal variable to hold the gridcells that make up the RIGHT border of the game area.
+	 */
 	private GridCell[] rightWalls;
+	/**
+	 * An internal variable to hold the gridcells that make up the TOP border of the game area.
+	 */
 	private GridCell[] topWalls;
+	/**
+	 * An internal variable to hold the gridcells that make up the BOTTOM border of the game area.
+	 */
 	private GridCell[] bottomWalls;
+	/**
+	 * An internal reference that is used to fire a window closing event, which is used to safely and properly
+	 *  close this application when the user presses the ESC key.
+	 */
 	private JFrame parentFrame;
 
+	/**
+	 * The internal object responsible for keeping score.
+	 */
 	private TetrisScore score=new TetrisScore();
 
 	
+	
+	/**
+	 * The internal listener used to listen to timer events and execute animation calls and subsequently game logic on top of that.
+	 */
 	private ActionListener timerListener=new ActionListener()
 	{
 		public void actionPerformed(ActionEvent e)
@@ -257,12 +326,22 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 			performOneAnimationTick();
 		}
 	};
-
+	
+	/**
+	 * The internal timer object used to fire periodic events and keep animation and game logic regularly and periodically executed.
+	 */
+	private Timer timer=new Timer(TIMER_PERIOD,timerListener);
+	/**
+	 * Used to listen to when this application window running this game has gained the focus of the user of the operating system.
+	 */
 	public void focusGained(FocusEvent e) 
 	{
 		
 	}
-
+	/**
+	 * Listens to when this application window running this game has lost the focus of the user of the operating system and therefore,
+	 * sets the game into a pause state.
+	 */
 	public void focusLost(FocusEvent e) 
 	{
 		if(currentState.isGameRunning())
@@ -270,11 +349,18 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 			this.setGamePaused();
 		}
 	}
-	
+	/**
+	 * Not implemented in this class, used to listen for keyTyped.
+	 */
 	public void keyTyped(KeyEvent e) 
 	{
 		
 	}
+	/**
+	 * This method is used as the application Controller in the Model-Viewer-Controller software architecture. This method is
+	 * called when a user pressed a keyboard key. Depending on the key pressed, further methods are called and game logic is processed
+	 * accordingly.
+	 */
 	public void keyPressed(KeyEvent e)
 	{
 	
@@ -362,12 +448,25 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		}
 		
 	}
+	/**
+	 * Not implemented in this class, used to listen for keyTyped.
+	 */
 	public void keyReleased(KeyEvent e)
 	{
 
 	}
 	
-	private Timer timer=new Timer(TIMER_PERIOD,timerListener);
+	/**
+	 * Constructs a new object of this class. Every argument except for the first one, is passed directly into the member object's constructor:
+	 * {@link BackgroundGrid#BackgroundGrid(int, int, int, int, int, int)}.
+	 * @param parent The JFrame object that needs to be properly closed when the application ends.
+	 * @param x The x component pixel location of the upper left corner of the BackgroundGrid object 
+	 * @param y The y component pixel location of the upper left corner of the BackgroundGrid object
+	 * @param gridwidth The width of the BackgroundGrid object in pixels.
+	 * @param gridheight The height of the BackgroundGrid object in pixels.
+	 * @param columns The number of columns of cells for this game
+	 * @param rows The number of rows of cells for this game.
+	 */
 	public TetrisGame(JFrame parent,int x, int y, int gridwidth, int gridheight,int columns, int rows)
 	{
 		super();
@@ -382,6 +481,12 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		this.statGrid=new TetrominoStats(score);
 		this.pauseScreen=new StartPauseScreen(this.preferredSize);
 	}
+	/**
+	 * Constructs a new object of this class. This constructor is specifically tailored for the pixel dimensions, used in
+	 * {@link TetrisStarter}, {@link StartPauseScreen} and {@link TetrominoStats}. Note: future versions of this module/API will have a standard class
+	 * for handling sizing across each member class that is delegated work on the TetrisGame drawing area.
+     * @param parent The JFrame object that needs to be properly closed when the application ends.
+	 */
 	public TetrisGame(JFrame parent)
 	{
 		super();
@@ -396,6 +501,10 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		this.statGrid=new TetrominoStats(score);
 		this.pauseScreen=new StartPauseScreen(this.preferredSize);
 	}
+	/**
+	 * Used to initialize the GridCell arrays that are used to arbitrarily draw the walls one cell thick of the TetrisGame, which pad the
+	 * internal BackgroundGrid object.
+	 */
 	private void initWalls()
 	{
 		leftWalls=new GridCell[22];
@@ -413,6 +522,10 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 			}
 		}
 	}
+	/**
+	 * Draws the walls of the edge of this class one cell thick. 
+	 * @param g2d The Graphics object, readily available in the definition of {@link TetrisGame#paintComponent(Graphics)}.
+	 */
 	private void drawWalls(Graphics2D g2d)
 	{
 		for(int i=0;i<leftWalls.length;i++)
@@ -426,9 +539,11 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 			}
 		}
 	}
-	Font scoreFont=new Font("Serif",Font.PLAIN,24);
-	Font gameOverFont=new Font("Serif",Font.BOLD,92);
-	Font quitInstructions=new Font("Serif",Font.PLAIN,48);
+	
+	/**
+	 * Calls the superclass implementation first. All rendering in this module/ game application
+	 * originates in this method's overrided definition.
+	 */
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -443,10 +558,20 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 			paintGamePauseScreen(g2d);
 		
 	}
+	/**
+	 * Paints the Game Start Screen.
+	 * @param g2d The Graphics object supplied by {@link TetrisGame#paintComponent(Graphics)}
+	 */
 	public void paintGameStartScreen(Graphics2D g2d)
 	{
 		pauseScreen.drawStartScreen(g2d);
 	}
+	
+	/**
+	 * Paints the Game Running Screen. This screen is painted underneath (or before) the start, pause and game-over screens.
+	 * @param g2d The Graphics object supplied by {@link TetrisGame#paintComponent(Graphics)}
+	 * @param state The object keeping track of the games current state.
+	 */
 	public void paintGameRunning(Graphics2D g2d,State state)
 	{
 		grid.drawBackgroundGrid(g2d);
@@ -456,14 +581,28 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		{
 			currentShape.drawShape(g2d, grid);
 		}
-		g2d.setFont(scoreFont);
-		g2d.setColor(Color.black);
 		
 	}
+	/**
+	 * Paints the Game Pause Screen.
+	 * @param g2d The Graphics object supplied by {@link TetrisGame#paintComponent(Graphics)}
+	 */
 	public void paintGamePauseScreen(Graphics2D g2d)
 	{
 		pauseScreen.drawPauseScreen(g2d); 
 	}
+	/**
+	 * The game over screen "GAME OVER!" font.
+	 */
+	private Font gameOverFont=new Font("Serif",Font.BOLD,92);
+	/**
+	 * The game over screen "Press ESC to close Window!" font.
+	 */
+	private Font quitInstructions=new Font("Serif",Font.PLAIN,48);
+	/**
+	 * Paints the Game Over Screen.
+	 * @param g2d The Graphics object supplied by {@link TetrisGame#paintComponent(Graphics)}
+	 */
 	public void paintGameOverScreen(Graphics2D g2d)
 	{
 		FontMetrics metrics = g2d.getFontMetrics(gameOverFont);
@@ -488,10 +627,16 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		g2d.setFont(quitInstructions);
 		g2d.drawString("Press ESC to close Window!",690/2-t2W/2 ,690/2+100+t2H/2 );
 	}
+	/**
+	 * Sets the internal current game state to {@link TetrisGame.State#GAME_START_SCREEN}.
+	 */
 	public void setGameStartScreen()
 	{
 		currentState.setGameStartScreen();
 	}
+	/**
+	 * Sets the internal current game state to {@link TetrisGame.State#GAME_RUNNING}.
+	 */
 	public void setGameRunning()
 	{
 		if(!timer.isRunning())
@@ -500,10 +645,16 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		}
 		currentState.setGameRunning();
 	}
+	/**
+	 * Sets the internal current game state to {@link TetrisGame.State#GAME_PAUSED}.
+	 */
 	public void setGamePaused()
 	{
 		currentState.setGamePaused();
 	}
+	/**
+	 * Sets the internal current game state to {@link TetrisGame.State#GAME_OVER}.
+	 */
 	public void setGameOver()
 	{
 		this.timer.stop();
@@ -512,6 +663,11 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		repaint();
 		
 	}
+	/**
+	 * Called once every time the internal timer event fires. See {@link TetrisGame#TIMER_PERIOD}. 
+	 * Only rendering explicitly occurs in this method definition, unless game logic is responding to a rendering or keyboard input,
+	 * no time based game logic occurs here.
+	 */
 	public void performOneAnimationTick()
 	{
 		animationTickCount++;
@@ -522,6 +678,11 @@ public class TetrisGame extends JPanel implements KeyListener,FocusListener
 		}
 		repaint();//repaint 25 times per second.
 	}
+	/**
+	 * Called only once every {@link TetrisGame#TICKS_BETWEEN_GRAVITY} times the {@link TetrisGame#performOneAnimationTick()} is called. 
+	 * Game logic is initiated here if need be, principally the periodic translation of a Shape downwards or spawning of a Shape if it does not
+	 * exist.
+	 */
 	public void performOneGameTick()
 	{
 		if(currentState.isGameRunning())

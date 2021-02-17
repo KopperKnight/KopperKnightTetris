@@ -12,7 +12,7 @@ import java.awt.*;
  * simplified painting system. Therefore, all the models need not know where to draw each rectangle and thus its pixel and color data (x,y,width,height,color)
  * in the Tetris gamespace, they need only to find the (x,y) location in the grid of tetris blocks to paint. This simplifies the models and painting process
  * throughout the whole project/module.
- * @author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  *
  */
 public class GridCell
@@ -148,7 +148,7 @@ public class GridCell
 	 * inside of {@link kopper.tetris.shape.Shape#drawShape(Graphics2D, GridCell[][])} , 
 	 * which in turn is called by each respective caller methods (see their method documentation).
 	 * 
-	 *  * See {@link BackgroundGrid#drawBackgroundGrid(Graphics2D)}
+	 * See {@link BackgroundGrid#drawBackgroundGrid(Graphics2D)}
 	 * 
 	 * @param g2d The graphics object ultimately supplied by overridden method  {@link TetrisGame#paintComponent(java.awt.Graphics)}
 	 * @param drawoutline True if draw outline, False if outline not needed to be drawn. Background GridCells do not draw borders, they draw solid colors.

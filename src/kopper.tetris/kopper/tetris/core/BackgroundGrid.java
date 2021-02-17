@@ -18,7 +18,7 @@ import kopper.tetris.shape.*;
  * of consumed "dead" Shapes. Programmatically, the shape object consumed by {@link BackgroundGrid#consumeShape(Shape)} is dereferenced and collected by the 
  * Garbage Collector, while conceptually it and its dead cells stitched into this BackgroundGrid's internal model will be refered to as a "Dead Shape".
  * </p>
- *  @author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  */
 public class BackgroundGrid 
 {

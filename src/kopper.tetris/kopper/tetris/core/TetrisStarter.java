@@ -6,7 +6,7 @@ import java.io.*;
 
 /**
  * This class provides the entry point to the Tetris Game application.
- * @author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  * 
  * 
  */

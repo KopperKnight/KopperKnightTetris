@@ -19,7 +19,7 @@ import kopper.tetris.core.Coord;
  * During rendering of the screen the absolute position of each member cell can be easily calculated by adding the relative coordinates to the single
  * absolute coordinate representing the Shape's Absolute Position.
  * </p>
- * @author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  *
  */
 public class ShapeT extends Shape

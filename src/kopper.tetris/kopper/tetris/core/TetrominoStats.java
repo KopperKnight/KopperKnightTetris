@@ -9,7 +9,7 @@ import kopper.tetris.shape.*;
  * This class keeps track of pixel data and colors and shapes to draw the score area of the Tetris Game.
  * This class is used to keep track of the {@link java.awt.Rectangle} and {@link java.awt.FontMetrics} data for each
  * text/numerical message painted to the screen, which is vital to keep the text properly positioned and spaced.
- * @author micha
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  *
  */
 public class TetrominoStats 

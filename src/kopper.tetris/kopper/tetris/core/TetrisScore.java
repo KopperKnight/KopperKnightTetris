@@ -14,7 +14,7 @@ import kopper.tetris.shape.ShapeZ;
  * filled 100 percent (and thus deleted). The composite score is left to be implemented later on in subsequent versions of this game.
  * The score can not be reset as per design for now. If one needs to reset the score, one may choose to reinstantiate a {@code new TetrisScore()} object
  * at will.
- * @author KopperKnight
+ * @author <a href="https://github.com/kopperknight">KopperKnight</a>
  *
  */
 public class TetrisScore 
