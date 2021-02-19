@@ -8,7 +8,7 @@
 SETLOCAL
 
 set runtimeoutput=custom_runtime
-set indir=commandlinecompiledbinaries
+set indir=binary
 
 jlink --output %runtimeoutput% --add-modules kopper.tetris --module-path %indir% --launcher kopperknighttetris=kopper.tetris/kopper.tetris.core.TetrisStarter
 

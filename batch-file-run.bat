@@ -2,7 +2,7 @@
 
 
 SETLOCAL
-set thedir=commandlinecompiledbinaries
+set thedir=bin
 
 IF EXIST %thedir%\kopper.tetris\kopper\tetris\core\TetrisStarter.class (
 start javaw -cp %thedir%\kopper.tetris kopper.tetris.core.TetrisStarter

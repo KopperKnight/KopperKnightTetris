@@ -18,7 +18,14 @@ public class TetrisStarter
 	 */
 	public static void main(String[]arg)
 	{
-		JFrame frame =new JFrame("KopperKnight Tetris (Build 0.20210210)");
+		//build number will follow MAJOR.MINOR.PATCH-YYDDD format
+		// where the YY is the last two digits the bulid came out
+		// where the DDD  is the 001-to-365th day of the year the build came out.
+		// I will initiate this game build at 0.2.9-21049 to say this is the
+		//last version this game will be at in the 0.2.x-yyddd version.
+		// the next version is anticipated to be 0.3.x.z-yyddd.
+		
+		JFrame frame =new JFrame("KopperKnight Tetris (Build 0.2.9-21049)");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		TetrisGame game=new TetrisGame(frame);
 		

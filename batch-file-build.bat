@@ -1,7 +1,7 @@
 SETLOCAL
 
 
-set outdir=commandlinecompiledbinaries
+set outdir=bin
 
 mkdir %outdir%\kopper.tetris\
 

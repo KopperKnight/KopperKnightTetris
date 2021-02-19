@@ -1,9 +1,10 @@
 SETLOCAL
 
-set thedir=commandlinecompiledbinaries
+set thedir=bin
+set output=dist
 
 IF EXIST %thedir%\kopper.tetris\kopper\tetris\core\TetrisStarter.class (
-jar -c -v -f koppertetris.jar --main-class=kopper.tetris.core.TetrisStarter -C %thedir%\kopper.tetris . 
+jar -c -v -f %output%\koppertetris.jar --main-class=kopper.tetris.core.TetrisStarter -C %thedir%\kopper.tetris . 
 
 @echo off
 @echo off
