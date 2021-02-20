@@ -1,0 +1,1 @@
+start bin\javaw -m kopper.tetris/kopper.tetris.core.TetrisStarter %*

@@ -25,7 +25,7 @@ public class TetrisStarter
 		//last version this game will be at in the 0.2.x-yyddd version.
 		// the next version is anticipated to be 0.3.x.z-yyddd.
 		
-		JFrame frame =new JFrame("KopperKnight Tetris (Build 0.2.9-21049)");
+		JFrame frame =new JFrame("KopperKnight Tetris (Build 0.2.9-21050)");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		TetrisGame game=new TetrisGame(frame);
 		

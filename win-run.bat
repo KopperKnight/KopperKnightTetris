@@ -1,6 +1,6 @@
 
 
-
+@echo off
 SETLOCAL
 set thedir=bin
 
@@ -12,10 +12,11 @@ start javaw -cp %thedir%\kopper.tetris kopper.tetris.core.TetrisStarter
 @echo off
 @echo ======================================================================
 @echo ^|^|The Java program is not compiled yet.                             ^|^|
-@echo ^|^|Please run the batch-file-build.bat file first.                   ^|^|
+@echo ^|^|Please run the win-build.bat file first,                          ^|^|
 @echo ^|^|then run this batch file to run the resultant, compiled program   ^|^|
 @echo ======================================================================
-pause )
-
+pause 
+)
+@echo off
 
 ENDLOCAL
