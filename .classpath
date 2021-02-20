@@ -6,5 +6,5 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin/modules/kopper.tetris"/>
+	<classpathentry kind="output" path="bin/kopper.tetris"/>
 </classpath>

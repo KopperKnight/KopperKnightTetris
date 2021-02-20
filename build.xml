@@ -9,28 +9,29 @@
     <property name="target" value="11"/>
     <property name="source" value="11"/>
     <path id="KopperKnightTetris.classpath">
-        <pathelement location="bin/modules/kopper.tetris"/>
+        <pathelement location="bin/kopper.tetris"/>
     </path>
     <path id="run.KopperKnightTetris.classpath">
         <path refid="KopperKnightTetris.classpath"/>
     </path>
     <target name="init">
-        <mkdir dir="bin/modules/kopper.tetris"/>
-        <copy includeemptydirs="false" todir="bin/modules/kopper.tetris">
+        <mkdir dir="bin/kopper.tetris"/>
+        <copy includeemptydirs="false" todir="bin/kopper.tetris">
             <fileset dir="src/kopper.tetris">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
     <target name="clean">
-        <delete dir="bin/modules/kopper.tetris"/>
+        <delete dir="bin/kopper.tetris"/>
+    	<delete dir="javadoc"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin/modules/kopper.tetris" includeantruntime="false" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin/kopper.tetris" includeantruntime="false" source="${source}" target="${target}">
             <src path="src/kopper.tetris"/>
             <classpath refid="KopperKnightTetris.classpath"/>
         </javac>
@@ -41,4 +42,9 @@
             <classpath refid="run.KopperKnightTetris.classpath"/>
         </java>
     </target>
+  	 <target name="javadoc">
+  	        <javadoc access="private" author="true" classpath="." destdir="javadoc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="kopper.tetris.core,kopper.tetris.shape" source="11" sourcefiles="src/kopper.tetris/module-info.java" sourcepath="src/kopper.tetris" splitindex="true" use="true" version="true">
+  	            <link href="https://docs.oracle.com/en/java/javase/11/docs/api/"/>
+  	        </javadoc>
+  	    </target>
 </project>
